@@ -1,5 +1,4 @@
 import React from 'react';
-import {createElement} from './utils.js';
 import './styles.css';
 
 /**
@@ -11,6 +10,15 @@ function App({store}) {
 
   const list = store.getState().list;
 
+  const onClickItem = (code) => {
+    if (code === store.selectedItemCode) {
+      store.removeSelectItemCode();
+    } else {
+      store.setSelectItemCode(code);
+      store.setCountItemSelection(code);
+    }
+  }
+
   return (
     <div className='App'>
       <div className='App-head'>
@@ -21,20 +29,23 @@ function App({store}) {
       </div>
       <div className='App-center'>
         <div className='List'>{
-          list.map(item =>
-            <div key={item.code} className='List-item'>
-              <div className={'Item' + (item.selected ? ' Item_selected' : '')}
-                   onClick={() => store.selectItem(item.code)}>
-                <div className='Item-code'>{item.code}</div>
-                <div className='Item-title'>{item.title}</div>
-                <div className='Item-actions'>
-                  <button onClick={() => store.deleteItem(item.code)}>
-                    Удалить
-                  </button>
+          list.map(item => {
+            const title = item.title + (item.countSelection ? ` | Выделяли ${item.countSelection} раз` : '');
+            return (
+              <div key={item.code} className='List-item'>
+                <div className={'Item' + (item.code === store.selectedItemCode ? ' Item_selected' : '')}
+                     onClick={() => onClickItem(item.code)}>
+                  <div className='Item-code'>{item.code}</div>
+                  <div className='Item-title'>{title}</div>
+                  <div className='Item-actions'>
+                    <button onClick={() => store.deleteItem(item.code)}>
+                      Удалить
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )
+          })}
         </div>
       </div>
     </div>

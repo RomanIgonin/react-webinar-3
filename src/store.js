@@ -5,6 +5,7 @@ class Store {
   constructor(initState = {}) {
     this.state = initState;
     this.listeners = []; // Слушатели изменений состояния
+    this.selectedItemCode = null;
   }
 
   /**
@@ -42,9 +43,20 @@ class Store {
    * Добавление новой записи
    */
   addItem() {
+    const list = this.state.list;
+    const lastIndex = this.state.list.length - 1;
+    const lastItemCode = list[lastIndex].code
+
+    const checkCodeDuplicate = (code) => {
+      const isDuplicated = list.findIndex(i => i.code === code) >= 0;
+      return isDuplicated ? checkCodeDuplicate(code + 1) : code;
+    }
+
+    const newCode = checkCodeDuplicate(lastItemCode + 1);
+
     this.setState({
       ...this.state,
-      list: [...this.state.list, {code: this.state.list.length + 1, title: 'Новая запись'}]
+      list: [...this.state.list, {code: newCode, title: 'Новая запись'}]
     })
   };
 
@@ -60,15 +72,35 @@ class Store {
   };
 
   /**
-   * Выделение записи по коду
+   * Записываем код выделенного элемента
    * @param code
    */
-  selectItem(code) {
+  setSelectItemCode(code) {
+    this.selectedItemCode = code;
+    for (const listener of this.listeners) listener();
+  }
+
+  /**
+   * Удаляем код выделенного элемента
+   */
+  removeSelectItemCode() {
+    this.setSelectItemCode(null);
+  }
+
+  /**
+   * Считаем сколько раз был выделен элемент
+   * @param code
+   */
+  setCountItemSelection(code) {
     this.setState({
       ...this.state,
       list: this.state.list.map(item => {
         if (item.code === code) {
-          item.selected = !item.selected;
+          if (item.countSelection) {
+            item.countSelection++;
+          } else {
+            item.countSelection = 1;
+          }
         }
         return item;
       })
