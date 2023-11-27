@@ -19,6 +19,19 @@ function App({store}) {
     }
   }
 
+  const countSelectionInfo = (num) => {
+    if (num) {
+      const countInfo = ` | Выделяли ${num} раз`;
+      if ((num % 10 === 2 || num % 10 === 3 || num % 10 === 4) && Math.floor(num % 100 / 10) !== 1) {
+        return countInfo + 'a';
+      } else {
+        return countInfo;
+      }
+    } else {
+      return '';
+    }
+  }
+
   return (
     <div className='App'>
       <div className='App-head'>
@@ -30,7 +43,7 @@ function App({store}) {
       <div className='App-center'>
         <div className='List'>{
           list.map(item => {
-            const title = item.title + (item.countSelection ? ` | Выделяли ${item.countSelection} раз` : '');
+            const title = item.title + countSelectionInfo(item.countSelection);
             return (
               <div key={item.code} className='List-item'>
                 <div className={'Item' + (item.code === store.selectedItemCode ? ' Item_selected' : '')}
