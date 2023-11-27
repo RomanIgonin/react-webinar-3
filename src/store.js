@@ -43,16 +43,14 @@ class Store {
    * Добавление новой записи
    */
   addItem() {
-    const list = this.state.list;
-    const lastIndex = this.state.list.length - 1;
-    const lastItemCode = list[lastIndex].code
-
     const checkCodeDuplicate = (code) => {
       const isDuplicated = list.findIndex(i => i.code === code) >= 0;
       return isDuplicated ? checkCodeDuplicate(code + 1) : code;
     }
 
-    const newCode = checkCodeDuplicate(lastItemCode + 1);
+    const list = this.state.list;
+    const maxCode = Math.max(...list.map(i => i.code), 0); // Найдем самый большой существующий код
+    const newCode = checkCodeDuplicate(maxCode + 1);  // Прибавим еденицу и проверим на дубликаты
 
     this.setState({
       ...this.state,
