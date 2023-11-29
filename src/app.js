@@ -1,5 +1,8 @@
-import React from 'react';
-import './styles.css';
+import React, {useCallback} from 'react';
+import List from "./components/list";
+import Controls from "./components/controls";
+import Head from "./components/head";
+import PageLayout from "./components/page-layout";
 
 /**
  * Приложение
@@ -10,58 +13,28 @@ function App({store}) {
 
   const list = store.getState().list;
 
-  const onClickItem = (code) => {
-    if (code === store.selectedItemCode) {
-      store.removeSelectItemCode();
-    } else {
-      store.setSelectItemCode(code);
-      store.setCountItemSelection(code);
-    }
-  }
+  const callbacks = {
+    onDeleteItem: useCallback((code) => {
+      store.deleteItem(code);
+    }, [store]),
 
-  const countSelectionInfo = (num) => {
-    if (num) {
-      const countInfo = ` | Выделяли ${num} раз`;
-      if ((num % 10 === 2 || num % 10 === 3 || num % 10 === 4) && Math.floor(num % 100 / 10) !== 1) {
-        return countInfo + 'a';
-      } else {
-        return countInfo;
-      }
-    } else {
-      return '';
-    }
+    onSelectItem: useCallback((code) => {
+      store.selectItem(code);
+    }, [store]),
+
+    onAddItem: useCallback(() => {
+      store.addItem();
+    }, [store])
   }
 
   return (
-    <div className='App'>
-      <div className='App-head'>
-        <h1>Приложение на чистом JS</h1>
-      </div>
-      <div className='App-controls'>
-        <button onClick={() => store.addItem()}>Добавить</button>
-      </div>
-      <div className='App-center'>
-        <div className='List'>{
-          list.map(item => {
-            const title = item.title + countSelectionInfo(item.countSelection);
-            return (
-              <div key={item.code} className='List-item'>
-                <div className={'Item' + (item.code === store.selectedItemCode ? ' Item_selected' : '')}
-                     onClick={() => onClickItem(item.code)}>
-                  <div className='Item-code'>{item.code}</div>
-                  <div className='Item-title'>{title}</div>
-                  <div className='Item-actions'>
-                    <button onClick={() => store.deleteItem(item.code)}>
-                      Удалить
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
-    </div>
+    <PageLayout>
+      <Head title='Приложение на чистом JS'/>
+      <Controls onAdd={callbacks.onAddItem}/>
+      <List list={list}
+            onDeleteItem={callbacks.onDeleteItem}
+            onSelectItem={callbacks.onSelectItem}/>
+    </PageLayout>
   );
 }
 

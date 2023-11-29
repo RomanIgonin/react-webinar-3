@@ -1,3 +1,5 @@
+import {generateCode} from "./utils";
+
 /**
  * Хранилище состояния приложения
  */
@@ -5,7 +7,6 @@ class Store {
   constructor(initState = {}) {
     this.state = initState;
     this.listeners = []; // Слушатели изменений состояния
-    this.selectedItemCode = null;
   }
 
   /**
@@ -43,18 +44,9 @@ class Store {
    * Добавление новой записи
    */
   addItem() {
-    const checkCodeDuplicate = (code) => {
-      const isDuplicated = list.findIndex(i => i.code === code) >= 0;
-      return isDuplicated ? checkCodeDuplicate(code + 1) : code;
-    }
-
-    const list = this.state.list;
-    const maxCode = Math.max(...list.map(i => i.code), 0); // Найдем самый большой существующий код
-    const newCode = checkCodeDuplicate(maxCode + 1);  // Прибавим еденицу и проверим на дубликаты
-
     this.setState({
       ...this.state,
-      list: [...this.state.list, {code: newCode, title: 'Новая запись'}]
+      list: [...this.state.list, {code: generateCode(), title: 'Новая запись'}]
     })
   };
 
@@ -65,42 +57,29 @@ class Store {
   deleteItem(code) {
     this.setState({
       ...this.state,
+      // Новый список, в котором не будет удаляемой записи
       list: this.state.list.filter(item => item.code !== code)
     })
   };
 
   /**
-   * Записываем код выделенного элемента
+   * Выделение записи по коду
    * @param code
    */
-  setSelectItemCode(code) {
-    this.selectedItemCode = code;
-    for (const listener of this.listeners) listener();
-  }
-
-  /**
-   * Удаляем код выделенного элемента
-   */
-  removeSelectItemCode() {
-    this.setSelectItemCode(null);
-  }
-
-  /**
-   * Считаем сколько раз был выделен элемент
-   * @param code
-   */
-  setCountItemSelection(code) {
+  selectItem(code) {
     this.setState({
       ...this.state,
       list: this.state.list.map(item => {
         if (item.code === code) {
-          if (item.countSelection) {
-            item.countSelection++;
-          } else {
-            item.countSelection = 1;
-          }
+          // Смена выделения и подсчёт
+          return {
+            ...item,
+            selected: !item.selected,
+            count: item.selected ? item.count : item.count + 1 || 1,
+          };
         }
-        return item;
+        // Сброс выделения если выделена
+        return item.selected ? {...item, selected: false} : item;
       })
     })
   }
