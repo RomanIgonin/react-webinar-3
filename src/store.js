@@ -72,7 +72,6 @@ class Store {
    * @param code
    */
   removeItemFromCart(code) {
-    console.log(this.state.cart.filter(i => i.code !== code))
     this.setState({
       ...this.state,
       cart: this.state.cart.filter(i => i.code !== code)

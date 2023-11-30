@@ -5,7 +5,6 @@
   transform: translate(-50%, -50%);
   width: 960px;
   margin: 0 auto;
-  padding-bottom: 70px;
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
@@ -22,7 +21,28 @@
 
 .Cart-empty {
   display: flex;
-  height: 63px;
+  height: 70px;
   justify-content: center;
   align-items: center;
+}
+
+.Cart-list {
+  margin: 70px 0 70px 0;
+}
+
+.Cart-total {
+  display: flex;
+  height: 70px;
+  font-weight: 700;
+  font-family: Arial;
+  font-size: 18px;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 112px;
+}
+
+.Cart-total-sum {
+  display: flex;
+  min-width: 100px;
+  justify-content: flex-end;
 }

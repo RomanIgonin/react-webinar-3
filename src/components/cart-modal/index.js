@@ -1,54 +1,63 @@
-import React from "react";
+import React, {useCallback} from "react";
 import PropTypes from "prop-types";
 import ReactModal from 'react-modal';
 import Head from "../head";
 import List from "../list";
 import './style.css';
 
-const CartModal = ({isModalOpen, closeModal, onClickRemoveItem, list}) => {
+const CartModal = (props) => {
   ReactModal.setAppElement('#root');
 
   const callbacks = {
-    closeModal: () => {
-      closeModal();
-    },
-    onClickRemoveItem: () => {
-      onClickRemoveItem();
-    }
+    closeModal: useCallback(() => {
+      props.closeModal();
+    }, []),
+    onClickRemoveItem: useCallback((code) => {
+      props.onClickRemoveItem(code);
+    }, [])
   }
 
   return (
     <ReactModal
-      isOpen={isModalOpen}
-      onRequestClose={closeModal}
+      isOpen={props.isModalOpen}
+      onRequestClose={props.closeModal}
       className='Cart-modal'
       overlayClassName="Overlay"
     >
       <Head title={'Корзина'} buttonTitle={'Закрыть'} onClickButton={callbacks.closeModal}/>
-      {list.length > 0 ? (
-        <List list={list} onClickButton={callbacks.onClickRemoveItem} isCart={true}/>
-      ) : (
-        <div className='Cart-empty'>Корзина пуста</div>
-      )}
-
+      <div className='Cart-list'>
+        {props.cart.length > 0 ? (
+          <>
+            <List list={props.cart} onClickButton={callbacks.onClickRemoveItem} isCart={true}/>
+            <div className='Cart-total'>
+              <div>Итого</div>
+              <div className='Cart-total-sum'>&nbsp;&nbsp;{props.totalCost} ₽</div>
+            </div>
+          </>
+        ) : (
+          <div className='Cart-empty'>Корзина пуста</div>
+        )}
+      </div>
     </ReactModal>
   )
 }
 
 CartModal.propTypes = {
   isModalOpen: PropTypes.bool,
-  closeModal: PropTypes.func,
-  onClickRemoveItem: PropTypes.func,
-  list: PropTypes.arrayOf(PropTypes.shape({
+  cart: PropTypes.arrayOf(PropTypes.shape({
     code: PropTypes.number
   })),
+  totalCost: PropTypes.number,
+  closeModal: PropTypes.func,
+  onClickRemoveItem: PropTypes.func,
 };
 
 CartModal.defaultProps = {
   isModalOpen: false,
-  list: [],
+  cart: [],
+  totalCost: 0,
   closeModal: () => {},
   onClickRemoveItem: () => {},
 }
 
-export default CartModal;
+export default React.memo(CartModal);

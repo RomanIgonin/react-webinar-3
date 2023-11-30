@@ -2,12 +2,18 @@ import React from "react";
 import PropTypes from "prop-types";
 import './style.css';
 
-function Head({title, buttonTitle, onClickButton}) {
+function Head(props) {
+  const callbacks = {
+    onClickButton: () => {
+      props.onClickButton();
+    },
+  }
+
   return (
     <div className='Head'>
-      <h1>{title}</h1>
-      {buttonTitle && (
-        <button className='Head-button' onClick={onClickButton}>{buttonTitle}</button>
+      <h1>{props.title}</h1>
+      {props.buttonTitle && (
+        <button className='Head-button' onClick={callbacks.onClickButton}>{props.buttonTitle}</button>
       )}
     </div>
   )

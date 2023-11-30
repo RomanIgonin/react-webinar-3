@@ -2,11 +2,19 @@ import React from "react";
 import PropTypes from 'prop-types';
 import './style.css';
 
-function Controls({onOpenCart, productCount, cost}) {
+function Controls(props) {
+  const cartInfo = props.productCount ? `${props.productCount} товара / ${props.cost} ₽` : 'пусто';
+
+  const callbacks = {
+    openCart: () => {
+      props.onOpenCart();
+    },
+  }
+
   return (
     <div className='Controls'>
-      <div className='Cart-info'>В корзине: <div className='Cart-info-bold-text'>{productCount} товара / {cost} ₽</div></div>
-      <button className='Button' onClick={() => onOpenCart()}>Перейти</button>
+      <div className='Cart-info'>В корзине: <div className='Cart-info-bold-text'>{cartInfo}</div></div>
+      <button className='Button' onClick={callbacks.openCart}>Перейти</button>
     </div>
   )
 }
