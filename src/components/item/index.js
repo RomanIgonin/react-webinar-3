@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import './style.css';
+import {cn as bem} from "@bem-react/classname";
 
 function Item(props) {
+  const cn = bem('Item');
   const buttonTitle = props.isCart ? 'Удалить' : 'Добавить';
 
   const callbacks = {
@@ -12,14 +14,14 @@ function Item(props) {
   }
 
   return (
-    <div className='Item'>
-      <div className='Item-code'>{props.item.code}</div>
-      <div className='Item-title'>{props.item.title}</div>
-      <div className='Item-price'>{props.item.price}&nbsp;</div>
+    <div className={cn()}>
+      <div className={cn('code')}>{props.item.code}</div>
+      <div className={cn('title')}>{props.item.title}</div>
+      <div className={cn('price')}>{props.item.price}&nbsp;</div>
       {props.isCart && (
-        <div className='Item-count'>{props.item.count} шт</div>
+        <div className={cn('count')}>{props.item.count} шт</div>
       )}
-      <div className='Item-actions'>
+      <div className={cn('actions')}>
         <button onClick={callbacks.onClickButton}>{buttonTitle}</button>
       </div>
     </div>
