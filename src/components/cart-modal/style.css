@@ -1,0 +1,28 @@
+.Cart-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 960px;
+  margin: 0 auto;
+  padding-bottom: 70px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.Cart-empty {
+  display: flex;
+  height: 63px;
+  justify-content: center;
+  align-items: center;
+}

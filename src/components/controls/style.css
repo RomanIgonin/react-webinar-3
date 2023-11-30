@@ -3,3 +3,19 @@
   justify-content: flex-end;
   padding: 20px;
 }
+
+.Cart-info {
+  display: flex;
+  flex-direction: row;
+  padding-right: 20px;
+  font-size: 18px;
+}
+
+.Cart-info-bold-text {
+  font-weight: 700;
+  padding-left: 15px;
+}
+
+.Button {
+  width: 76px;
+}

@@ -1,5 +1,3 @@
-import {generateCode} from "./utils";
-
 /**
  * Хранилище состояния приложения
  */
@@ -41,47 +39,44 @@ class Store {
   }
 
   /**
-   * Добавление новой записи
-   */
-  addItem() {
-    this.setState({
-      ...this.state,
-      list: [...this.state.list, {code: generateCode(), title: 'Новая запись'}]
-    })
-  };
-
-  /**
-   * Удаление записи по коду
+   * Добавить товар в корзину
    * @param code
    */
-  deleteItem(code) {
-    this.setState({
-      ...this.state,
-      // Новый список, в котором не будет удаляемой записи
-      list: this.state.list.filter(item => item.code !== code)
-    })
-  };
-
-  /**
-   * Выделение записи по коду
-   * @param code
-   */
-  selectItem(code) {
-    this.setState({
-      ...this.state,
-      list: this.state.list.map(item => {
-        if (item.code === code) {
-          // Смена выделения и подсчёт
-          return {
-            ...item,
-            selected: !item.selected,
-            count: item.selected ? item.count : item.count + 1 || 1,
-          };
-        }
-        // Сброс выделения если выделена
-        return item.selected ? {...item, selected: false} : item;
+  addItemToCart(code) {
+    const itemInCart = this.state.cart.find(i => i.code === code);
+    if (itemInCart) {
+      this.setState({
+        ...this.state,
+        cart: this.state.cart.map(i => {
+          if (i.code === code) {
+            return {
+              ...i,
+              count: i.count + 1
+            }
+          } else {
+            return i;
+          }
+        })
       })
-    })
+    } else {
+      const itemInList = this.state.list.find(i => i.code === code);
+      this.setState({
+        ...this.state,
+        cart: [ ...this.state.cart, { ...itemInList, count: 1 }]
+      })
+    }
+  };
+
+  /**
+   * Удалить товар из корзины
+   * @param code
+   */
+  removeItemFromCart(code) {
+    console.log(this.state.cart.filter(i => i.code !== code))
+    this.setState({
+      ...this.state,
+      cart: this.state.cart.filter(i => i.code !== code)
+    });
   }
 }
 
