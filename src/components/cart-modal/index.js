@@ -4,9 +4,11 @@ import ReactModal from 'react-modal';
 import Head from "../head";
 import List from "../list";
 import './style.css';
+import {priceFormat} from "../../utils";
 
 const CartModal = (props) => {
   ReactModal.setAppElement('#root');
+  const cost = priceFormat(props.cost);
 
   const callbacks = {
     closeModal: useCallback(() => {
@@ -31,7 +33,7 @@ const CartModal = (props) => {
             <List list={props.cart} onClickButton={callbacks.onClickRemoveItem} isCart={true}/>
             <div className='Cart-total'>
               <div>Итого</div>
-              <div className='Cart-total-sum'>&nbsp;&nbsp;{props.totalCost} ₽</div>
+              <div className='Cart-total-sum'>&nbsp;&nbsp;{cost} ₽</div>
             </div>
           </>
         ) : (
@@ -47,7 +49,7 @@ CartModal.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.shape({
     code: PropTypes.number
   })),
-  totalCost: PropTypes.number,
+  cost: PropTypes.number,
   closeModal: PropTypes.func,
   onClickRemoveItem: PropTypes.func,
 };
@@ -55,7 +57,7 @@ CartModal.propTypes = {
 CartModal.defaultProps = {
   isModalOpen: false,
   cart: [],
-  totalCost: 0,
+  cost: 0,
   closeModal: () => {},
   onClickRemoveItem: () => {},
 }

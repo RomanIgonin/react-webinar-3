@@ -25,10 +25,6 @@ export const generateCode = (function (start = 0) {
   return () => ++start;
 }());
 
-export const calcCartCost = (cart) => {
-  if (cart.length > 0) {
-    return cart.reduce((a, b) => {return a + b.price * b.count}, 0)
-  } else {
-    return 0;
-  }
+export const priceFormat = (price) => {
+  return String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import './style.css';
-import {plural} from "../../utils";
+import {plural, priceFormat} from "../../utils";
 
 function Controls(props) {
   const pluralWord = plural(props.productCount, {
@@ -9,8 +9,8 @@ function Controls(props) {
     few: 'товара',
     many: 'товаров'
   });
-
-  const cartInfo = props.productCount ? `${props.productCount} ${pluralWord} / ${props.cost} ₽` : 'пусто';
+  const cost = priceFormat(props.cost);
+  const cartInfo = props.productCount ? `${props.productCount} ${pluralWord} / ${cost} ₽` : 'пусто';
 
   const callbacks = {
     openCart: () => {

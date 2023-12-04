@@ -65,6 +65,7 @@ class Store {
         cart: [ ...this.state.cart, { ...itemInList, count: 1 }]
       })
     }
+    this.#calcCartCost();
   };
 
   /**
@@ -76,6 +77,21 @@ class Store {
       ...this.state,
       cart: this.state.cart.filter(i => i.code !== code)
     });
+    this.#calcCartCost();
+  }
+
+  /**
+   * Подсчет общей стоимости корзины
+   */
+  #calcCartCost() {
+    const isCartFull = this.state.cart.length > 0;
+    if (isCartFull) {
+      const cost = this.state.cart.reduce((a, b) => {return a + b.price * b.count}, 0);
+      this.setState({
+        ...this.state,
+        cost
+      });
+    }
   }
 }
 

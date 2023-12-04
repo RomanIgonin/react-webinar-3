@@ -16,7 +16,7 @@ function App({store}) {
 
   const list = store.getState().list;
   const cart = store.getState().cart;
-  const totalCost = calcCartCost(cart);
+  const cost = store.getState().cost;
 
   const callbacks = {
     onAddItemToCart: useCallback((code) => {
@@ -36,12 +36,12 @@ function App({store}) {
   return (
     <PageLayout>
       <Head title='Магазин'/>
-      <Controls onOpenCart={callbacks.onOpenModal} productCount={cart.length} cost={totalCost}/>
+      <Controls onOpenCart={callbacks.onOpenModal} productCount={cart.length} cost={cost}/>
       <List list={list} onClickButton={callbacks.onAddItemToCart} />
       <CartModal
         isModalOpen={isModalOpen}
         cart={cart}
-        totalCost={totalCost}
+        cost={cost}
         closeModal={callbacks.onCloseModal}
         onClickRemoveItem={callbacks.onRemoveItemFromCart}
       />
