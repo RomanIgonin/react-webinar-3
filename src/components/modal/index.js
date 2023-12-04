@@ -1,12 +1,9 @@
 import React, {useCallback} from "react";
 import PropTypes from "prop-types";
-import ReactModal from 'react-modal';
 import Head from "../head";
 import './style.css';
 
 const Modal = (props) => {
-  ReactModal.setAppElement('#root');
-
   const callbacks = {
     closeModal: useCallback(() => {
       props.closeModal();
