@@ -3,8 +3,8 @@ import List from "./components/list";
 import Controls from "./components/controls";
 import Head from "./components/head";
 import PageLayout from "./components/page-layout";
-import {calcCartCost} from "./utils";
-import CartModal from "./components/cart-modal";
+import Modal from "./components/modal";
+import Cart from "./components/cart";
 
 /**
  * Приложение
@@ -36,15 +36,16 @@ function App({store}) {
   return (
     <PageLayout>
       <Head title='Магазин'/>
-      <Controls onOpenCart={callbacks.onOpenModal} productCount={cart.length} cost={cost}/>
+      <Controls onOpenCart={callbacks.onOpenModal} productCount={cart.length} cost={cost} />
       <List list={list} onClickButton={callbacks.onAddItemToCart} />
-      <CartModal
+      <Modal
         isModalOpen={isModalOpen}
-        cart={cart}
-        cost={cost}
+        title={'Корзина'}
+        buttonTitle={'Закрыть'}
         closeModal={callbacks.onCloseModal}
-        onClickRemoveItem={callbacks.onRemoveItemFromCart}
-      />
+      >
+        <Cart cart={cart} cost={cost} onClickRemoveItem={callbacks.onRemoveItemFromCart} />
+      </Modal>
     </PageLayout>
   );
 }
